@@ -18,7 +18,7 @@ To clone and run this application locally, you need [Python](https://www.python.
 
 #### Clone this repository
 ``` 
-$ git clone https://git.chalmers.se/courses/dit825/2022/group02/rps.git
+$ git clone https://github.com/NilsDunlop/RPS.git
 ```
 #### Go into the repository
 ``` 

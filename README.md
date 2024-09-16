@@ -35,7 +35,7 @@ To clone and run the application as a Dockerized application, you need [Docker](
 
 #### Clone this repository
 ``` 
-$ git clone https://git.chalmers.se/courses/dit825/2022/group02/rps.git
+$ git clone https://github.com/NilsDunlop/RPS.git
 ```
 #### Run server
 ``` 

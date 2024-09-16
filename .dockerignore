@@ -1,0 +1,13 @@
+# Python & JetBrains
+.idea/
+__pycache__
+
+# Jupyter Notebook
+*.ipynb_checkpoints
+
+# Data files
+db.sqlite3
+data.sqlite3
+data/input_test/
+data/input_train/
+data/validation2/

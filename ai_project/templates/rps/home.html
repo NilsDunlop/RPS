@@ -1,0 +1,345 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Home</title>
+    <!-- Text fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Outfit&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Insert different images to first three rows in table
+            var firstRow = $('.table tbody> tr:eq(0) ');
+            var secondRow = $('.table tbody> tr:eq(1) ');
+            var thirdRow = $('.table tbody> tr:eq(2) ');
+            firstRow.find('td').eq(0).prepend('<img id="img" src="{% static '/images/gold-medal.png' %}" />');
+            secondRow.find('td').eq(0).prepend('<img id="img" src="{% static '/images/silver-medal.png' %}" />');
+            thirdRow.find('td').eq(0).prepend('<img id="img" src="{% static '/images/bronze-medal.png' %}" />');
+
+        });
+    </script>
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-expand-sm">
+    <div class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <button type="button" class="nav-button login" data-bs-toggle="modal" data-bs-target="#logModal">
+            Log In
+        </button>
+        <button type="button" class="nav-button register" onclick="location.href='{% url 'register' %}'">
+            Register
+        </button>
+    </div>
+    <div class="navbar-nav my-2 my-lg-0">
+        <button type="button" class="nav-button my-2 my-sm-0 how-to-play" data-bs-toggle="modal"
+                data-bs-target="#myModal">
+            How
+            To Play?
+        </button>
+    </div>
+</nav>
+
+<!-- navbar -->
+
+<!-- Container -->
+<div class="container">
+    <!-- Home Page Logo -->
+    <div class="row justify-content-center">
+        <span class="title">Rock Paper Scissors</span>
+    </div>
+    <!-- Home Page Logo -->
+
+    <!-- Message alerts -->
+    <div class="row justify-content-center">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"></button>
+                    </div>
+                {% else %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <!-- Message alerts -->
+
+    <!-- Card-Row -->
+    <div class="row card-row">
+        <!-- Card -->
+        <div class="col grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Leaderboard</h4>
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table" id="table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Player</th>
+                                <th>Score</th>
+                                <th>Recent Game</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr id="value">
+                                {% for game in games %}
+                                    {% for user in users %}
+                                        {% if game.game_user_info_id == user.id %}
+                                            <td></td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ game.score }}</td>
+                                            <td>{{ game.date }}</td>
+                                            </tr>
+                                            </tbody>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                        </table>
+                    </div>
+                    <!-- Table -->
+                </div>
+            </div>
+        </div>
+        <!-- Card -->
+
+        <!-- Card -->
+        <div class="col grid-margin stretch-card">
+            <div class="card">
+                <!-- Card Body -->
+                <div class="card-body">
+                    <p class="card-title game-title">Wanna Play?</p>
+                    <p class="card-text">Game requests camera control
+                        to see your choices</p>
+                    <button onclick="location.href='{% url 'player' %}'" class="btn play-button">Play Game</button>
+                    <!-- Card Body -->
+                </div>
+            </div>
+        </div>
+        <!-- Card -->
+    </div>
+    <!-- Card-Row -->
+</div>
+<!-- Container -->
+
+<!-- Modals -->
+
+{% include 'rps/info.html' %}
+{% include 'rps/login.html' %}
+<!-- Modals -->
+</body>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
+
+<style>
+    /* Background */
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: linear-gradient(-45deg, #E73C7E, #23A6D5, #23D5AB);
+        animation: change 10s ease-in-out infinite;
+        background-size: 400% 600%;
+        text-align: center;
+    }
+
+    @keyframes change {
+        0% {
+            background-position: 0 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0 50%;
+        }
+    }
+
+    /*-- Navbar--*/
+    .nav-button {
+        font-family: 'Lobster Two';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        color: #FFFFFF;
+        background-color: transparent;
+        border: none;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
+        padding-right: 5px;
+    }
+
+    .nav-button:hover {
+        color: #6cead5;
+        font-weight: bold;
+    }
+
+    /* Home page title*/
+    .title {
+        color: rgba(255, 255, 255, 1);
+        position: relative;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: Lobster Two;
+        font-weight: Bold;
+        font-size: 96px;
+        opacity: 1;
+    }
+
+    /* message alert */
+    .alert {
+        max-width: 600px;
+        width: 100%;
+    }
+
+    /* Cards */
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -ms-box-shadow: none
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        max-width: 550px;
+        width: 100%;
+        height: 100%;
+        max-height: 350px;
+        word-wrap: break-word;
+        background-clip: border-box;
+        border: 1px solid #d2d2dc;
+        border-radius: 0;
+        background: rgba(255, 253, 253, 0.65);
+        border-radius: 5px;
+        padding: 10px 10px 10px 10px;
+        margin-bottom: 30px;
+    }
+
+    .card-row {
+        margin-top: 60px;
+    }
+
+    .game-title {
+        margin-top: 50px;
+    }
+
+    .card .card-title {
+        color: #000000;
+        margin-bottom: 0.625rem;
+        text-transform: capitalize;
+        font-size: 32px;
+        font-weight: 500;
+        font-family: Century Gothic;
+
+    }
+
+    .card .card-text {
+        font-family: Century Gothic;
+        font-size: 20px;
+        color: #000000;
+        padding-bottom: 15px;
+        margin-top: 40px;
+    }
+
+    p {
+        font-size: 0.875rem;
+        margin-bottom: .5rem;
+        line-height: 1.5rem;
+    }
+
+    h5 {
+        text-align: center;
+        font-family: Century Gothic;
+    }
+
+    h6 {
+        text-align: left;
+        font-family: Century Gothic;
+    }
+
+    .play-button {
+        background: #00CCAC;
+        min-width: 150px;
+        min-height: 40px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+        border-radius: 15px;
+        text-align: center;
+        font-family: Outfit;
+        font-style: normal;
+        letter-spacing: 0.15em;
+        font-weight: 600;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        color: #FFFBFB;
+        margin-top: 5%;
+    }
+
+    .play-button:hover {
+        background-color: #01c0a2;
+        min-width: 155px;
+        min-height: 45px;
+        color: #FFFBFB;
+        text-align: center;
+    }
+
+    /* Table */
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+
+    .table, .jsgrid .jsgrid-table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+    .table thead th, .jsgrid .jsgrid-table thead th {
+        border-top: 0;
+        border-bottom-width: 1px;
+        font-weight: 500;
+        font-size: .875rem;
+        text-transform: uppercase;
+    }
+
+    .table td, .jsgrid .jsgrid-table td {
+        font-size: 0.875rem;
+        padding: .875rem 0.9375rem;
+    }
+
+    #img {
+        width: 30px;
+        height: 30px;
+    }
+
+</style>
+
+
+
+

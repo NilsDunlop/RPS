@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script>
+        // function to reload image every 6 seconds
+        window.onload = function () {
+            var reimg = document.getElementById('pic')
+            setInterval(function () {
+                reimg.src = reimg.src.replace(/\?.*/, function () {
+                    return '?' + new Date()
+                })
+            }, 6000)
+        }
+    </script>
+</head>
+<body>
+<!-- The Info Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <!-- Info Modal Header -->
+            <div class="modal-header ">
+                <h4 class="modal-title">How do you play?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Info Modal body -->
+            <div class="modal-body">
+                <h6><strong>Rock, paper, scissors</strong> is a legendary hand game that many of us played with
+                    friends in childhood.</h6><br>
+                <h6> Rules are simple. You choose one of three hand gesture shapes (✊, ✋, ✌), which you form in the
+                    camera frame. Your goal is to guess a shape that beats your opponent's choice:</h6><br>
+
+                <h5>Rock beats Scissors&nbsp&nbsp (✊ → ✌)<br>Paper covers Rock&nbsp&nbsp (✋ → ✊)<br>Scissors cuts
+                    Paper &nbsp&nbsp&nbsp(✌ → ✋)</h5><br>
+                <img id="pic" class="modal-img" src="{% static '/images/rps2.gif' %}">
+            </div>
+            <!-- Info Modal body -->
+
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</html>
+
+<style>
+    .modal-content {
+        padding: 0px 30px 30px 30px;
+        background: rgba(255, 253, 253, 0.98);
+    }
+
+    .modal-title {
+        font-family: Century Gothic;
+    }
+
+    h5 {
+        text-align: center;
+        font-family: Century Gothic;
+    }
+
+    h6 {
+        text-align: left;
+        font-family: Century Gothic;
+    }
+
+    #pic {
+        height: 200px;
+        widht: 200px;
+    }
+
+</style>

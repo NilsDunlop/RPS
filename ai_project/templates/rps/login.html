@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<!-- The Log In Modal -->
+<div class="modal fade" id="logModal">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+
+            <!-- Log In Modal Header -->
+            <div class="modal-header ">
+                <h4 class="modal-title">Log In</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Log In Modal Header -->
+
+            <!-- Log In Modal body -->
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4" style="float: right;">
+                        <button type="button" class="admin-btn" onclick="location.href='/admin'">ADMIN</button>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{ login_form.username }}
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        {{ login_form.password }}
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <!-- Submit button -->
+                        <button type="submit" id="submit-btn" class="btn btn-block mb-4">LOGIN</button>
+                    </div>
+                    <!-- Register link -->
+                    <div class="text-center">
+                        <p>Not a member?
+                            <button type="button" class="reg-btn" onclick="location.href='{% url 'register' %}'">
+                                Register
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <!-- Log In Modal body -->
+
+        </div>
+    </div>
+</div>
+<!-- The Log In Modal -->
+<script src="{% static 'assets/js/bootstrap.js' %}"></script>
+<script src="{% static 'assets/js/jquery.js' %}"></script>
+<script>
+    //Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder = 'Username';
+    form_fields[2].placeholder = 'Password';
+
+    for (var field in form_fields) {
+        form_fields[field].className += ' form-control'
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+<style>
+    .modal-content {
+        padding: 0px 30px 30px 30px;
+        background: rgba(255, 253, 253, 0.98);
+    }
+
+    .modal-title {
+        font-family: Century Gothic;
+
+    }
+
+    h5 {
+        text-align: center;
+        font-family: Century Gothic;
+    }
+
+    h6 {
+        text-align: left;
+        font-family: Century Gothic;
+    }
+
+    #submit-btn {
+        background: #00CCAC;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+        border-radius: 7px;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-family: Outfit;
+        font-style: normal;
+        letter-spacing: 0.2em;
+        color: #FFFBFB;
+        font-weight: 600;
+        font-size: 12px;
+        border: none;
+        cursor: pointer;
+
+    }
+
+    #submit-btn:hover {
+        box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 2px 30px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .reg-btn {
+        border: none;
+        background-color: transparent;
+        color: #8707b4;
+        font-weight: bold;
+        font-family: Outfit;
+        font-size: 17px;
+    }
+
+    .reg-btn:hover {
+        font-size: 18px;
+        color: #720598;
+    }
+
+    .admin-btn {
+        background-color: transparent;
+        color: rgba(26, 26, 26, 0.84);
+        font-family: Outfit;
+        border: 1px solid #8707b4;
+        border-radius: 15px;
+        font-weight: bold;
+        font-family: Outfit;
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-decoration: none;
+        display: inline-block;
+        padding: 10px 20px;
+
+    }
+
+    .admin-btn:hover {
+        background-color: #8707b4; /* Green */
+        color: white;
+    }
+</style>

@@ -1,0 +1,221 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(-45deg, #E73C7E, #23A6D5, #23D5AB);
+    animation: change 10s ease-in-out infinite;
+    background-size: 400% 400%;
+    text-align: center;
+}
+
+@keyframes change {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.card {
+    height: 350px;
+    width: 550px;
+    margin: 30px auto;
+    background: rgba(255, 253, 253, 0.65);
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+
+}
+
+.card-title {
+    font-family: Century Gothic;
+    font-weight: 500;
+    font-size: 32px;
+    color: rgba(37, 36, 36, 0.89);
+    padding-bottom: 30px;
+    padding-top: 25px;
+
+}
+
+.card-text {
+    font-family: Century Gothic;
+    font-size: 20px;
+    color: #000000;
+    padding-bottom: 15px;
+}
+
+.btn {
+    background: #00CCAC;
+    width: 30%;
+    height: 15%;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    text-align: center;
+    font-family: Outfit;
+    font-style: normal;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    color: #FFFBFB;
+}
+
+.play-button:hover {
+    background-color: #01c0a2;
+    width: 31%;
+    height: 16%;
+    color: #FFFBFB;
+    text-align: center;
+}
+
+/*---Background---*/
+
+
+.title {
+    color: rgba(255, 255, 255, 1);
+    position: relative;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: Lobster Two;
+    font-weight: Bold;
+    font-size: 96px;
+    opacity: 1;
+}
+
+/*--- ---*/
+
+/*-- Navbar--*/
+
+.nav-button {
+    font-family: 'Lobster Two';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    color: #FFFFFF;
+    background-color: transparent;
+    border: none;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    padding-right: 5px;
+}
+
+.nav-button:hover {
+    color: #6cead5;
+    font-weight: bold;
+}
+
+/*---Modals--*/
+.modal-content {
+    padding: 0px 30px 30px 30px;
+    background: rgba(255, 253, 253, 0.98);
+}
+
+.modal-title {
+    font-family: Century Gothic;
+
+}
+
+h5 {
+    text-align: center;
+    font-family: Century Gothic;
+}
+
+h6 {
+    text-align: left;
+    font-family: Century Gothic;
+}
+
+.modal-img {
+    height: 150px;
+    width: 200px;
+}
+
+#submit-btn {
+    background: #00CCAC;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 7px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: Outfit;
+    font-style: normal;
+    letter-spacing: 0.2em;
+    color: #FFFBFB;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+
+}
+
+#submit-btn:hover {
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 2px 30px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sub-btn {
+    background: #00CCAC;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 7px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: Outfit;
+    font-style: normal;
+    letter-spacing: 0.2em;
+    color: #FFFBFB;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+
+}
+
+#sub-btn:hover {
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 2px 30px 0 rgba(0, 0, 0, 0.19);
+}
+
+.reg-btn {
+    border: none;
+    background-color: transparent;
+    color: #8707b4;
+    font-weight: bold;
+    font-family: Outfit;
+    font-size: 17px;
+}
+
+.reg-btn:hover {
+    font-size: 18px;
+    color: #720598;
+}
+
+.admin-btn {
+    background-color: transparent;
+    color: rgba(26, 26, 26, 0.84);
+    font-family: Outfit;
+    border: 1px solid #8707b4;
+    border-radius: 15px;
+    font-weight: bold;
+    font-family: Outfit;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+
+}
+
+.admin-btn:hover {
+    background-color: #8707b4; /* Green */
+    color: white;
+}
+
+/*-- ---*/

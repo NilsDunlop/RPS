@@ -1,0 +1,379 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Player</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet"/>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Include Webcam.js Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"
+            integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+<!-- Registered users Navbar  -->
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-sm">
+        <div class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <button class="welcome-btn">Hi {{ user.first_name }}!</button>
+            <button type="button" class="nav-button" onclick="location.href='{% url 'login' %}'">
+                Home
+            </button>
+            <button type="button" class="nav-button" onclick="location.href='{% url 'logout' %}'">
+                Logout
+            </button>
+        </div>
+        <div class="navbar-nav my-2 my-lg-0">
+            <button type="button" class="nav-button my-2 my-sm-0" data-bs-toggle="modal"
+                    data-bs-target="#myModal">
+                How
+                To Play?
+            </button>
+        </div>
+    </nav>
+    <!-- Registered users Navbar  -->
+    <!-- Non registered users Navbar  -->
+{% else %}
+    <nav class="navbar navbar-expand-sm">
+        <div class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <button type="button" class="nav-button" onclick="location.href='{% url 'login' %}'">
+                Home
+            </button>
+            <button type="button" class="nav-button" onclick="location.href='{% url 'logout' %}'">
+                Register
+            </button>
+        </div>
+        <div class="navbar-nav my-2 my-lg-0">
+            <button type="button" class="nav-button my-2 my-sm-0" data-bs-toggle="modal"
+                    data-bs-target="#myModal">
+                How
+                To Play?
+            </button>
+        </div>
+    </nav>
+
+{% endif %}
+<!-- Non registered users Navbar  -->
+
+<!-- Title  -->
+
+<h1 id="rps_title">Rock Paper Scissors</h1>
+<!-- Title  -->
+
+<!-- Video element and computer image  -->
+<div class="container">
+    <div class="row justify-content-around">
+        <div class="col-md-6">
+            <div id="videoElement"></div>
+        </div>
+        <div class="col-md-6">
+            <img class="ml-5" id="computer-image" alt="RPS Image" src="{% static '/images/default.png' %}">
+        </div>
+    </div>
+</div>
+<!-- Video element and computer image  -->
+
+<!-- button -->
+<button type="submit" class="play-button btn btn-outline-light btn-lg" onclick="takeSnapshot()">Play</button>
+<!-- button -->
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <span class="footer-text">You  </span>
+                    <span id="prediction"></span>
+                </div>
+                <div class="col">
+                    <span class="footer-text" id="player_score">0</span>
+                    <span class="footer-text">:</span>
+                    <span class="footer-text" id="computer_score">0</span>
+                </div>
+                <div class="col">
+                    <span class="footer-text">Computer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Footer -->
+
+<!-- Info Modal -->
+
+{% include 'rps/info.html' %}
+
+<!-- Info Modal -->
+
+<script>
+    // Initialize variables
+    let count = 0;
+    let imgArr = [];
+    let player = '';
+    let playerElement = null;
+    let computer = '';
+
+    // Configure settings and attach camera
+    Webcam.set({
+        width: 475,
+        height: 475,
+        image_format: 'jpeg',
+        jpeg_quality: 100
+    });
+
+    Webcam.attach('#videoElement');
+
+    // Method to take a snapshot of the webcam and
+    // sendData() to the django backend for processing
+    function takeSnapshot() {
+        Webcam.snap(function (data_uri) {
+            document.getElementById('rps_title').textContent = 'Rock Paper Scissors' // Clear title
+            document.getElementById("computer-image").src = "{% static '/images/default.png' %}"; // Clear comp-img
+            document.getElementById('prediction').textContent = ''; // Clear prediction element
+
+            imgArr.push(data_uri);
+
+            Webcam.freeze();
+            let x = sendData();
+
+            setTimeout(function () { // function to wait 1.5 seconds before unfreezing camera
+                determineWinner();
+                imgArr = []; // Clear image array
+                Webcam.unfreeze();
+            }, 1500);
+        });
+    }
+
+    async function sendData() {
+        json = null;
+        await fetch('http://127.0.0.1/player/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(imgArr)
+        })
+            .then((response) => response.json())
+            .then((responseJSON) => {
+                json = responseJSON;
+                playerElement = document.getElementById("prediction");
+                player = document.createTextNode(json.result);
+                playerElement.appendChild(player);
+                randomize();
+                return json;
+            }).catch(err => {
+                json = err;
+                return json;
+            });
+    }
+
+    // Method to randomize the computers current RPS move
+    function randomize() {
+        const images = [
+            "{% static '/images/rock.png' %}",
+            "{% static '/images/paper.png' %}",
+            "{% static '/images/scissor.png' %}",
+        ];
+        rand_img = ~~(Math.random() * images.length);
+        document.getElementById("computer-image").src = images[rand_img];
+        if (rand_img === 0) {
+            computer = "👊";
+        } else if (rand_img === 1) {
+            computer = "✋";
+        } else {
+            computer = "✌";
+        }
+    }
+
+    // Method to determine the winner of the rounds computer and player RPS outputs
+    function determineWinner() {
+        let title = document.getElementById('rps_title');
+        let player_score = document.getElementById('player_score').innerHTML;
+        let player_text = document.getElementById('player_score');
+        let computer_score = document.getElementById('computer_score').innerHTML;
+        let computer_text = document.getElementById('computer_score');
+        let update_score;
+
+        if (player.data === computer) {
+            title.textContent = 'Tie';
+            update_score = 0;
+        } else if (player.data === "👊") {
+            if (computer === "✋") {
+                title.textContent = 'Computer Won';
+                computer_score = parseInt(computer_score) + 1;
+                update_score = -1;
+                computer_text.textContent = computer_score.toString();
+            } else {
+                title.textContent = 'Player Won';
+                player_score = parseInt(player_score) + 1;
+                update_score = 1;
+                player_text.textContent = player_score.toString();
+            }
+        } else if (player.data === "✋") {
+            if (computer === "✌") {
+                title.textContent = 'Computer Won';
+                computer_score = parseInt(computer_score) + 1;
+                update_score = -1;
+                computer_text.textContent = computer_score.toString();
+            } else {
+                title.textContent = 'Player Won';
+                player_score = parseInt(player_score) + 1;
+                update_score = 1;
+                player_text.textContent = player_score.toString();
+            }
+        } else if (player.data === "✌") {
+            if (computer === "👊") {
+                title.textContent = 'Computer Won';
+                computer_score = parseInt(computer_score) + 1;
+                update_score = -1;
+                computer_text.textContent = computer_score.toString();
+            } else {
+                title.textContent = 'Player Won';
+                player_score = parseInt(player_score) + 1
+                update_score = 1;
+                player_text.textContent = player_score.toString();
+            }
+        }
+        // call function to update user score
+        updateScore(parseInt(update_score))
+    }
+
+    function updateScore(player_score) {
+        // http get request to update user score
+        $.ajax({
+            type: "GET",
+            url: "",
+            data: {
+                "score": player_score,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            error: function () {
+                alert("Something went wrong");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
+
+<style>
+
+    /* Background */
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: linear-gradient(90deg, #23D5AB 40%, #E6F3EA 50%, #02AAB0 60%);
+        text-align: center;
+    }
+
+    /*Navbar*/
+    .navbar-nav {
+        flex-direction: row;
+    }
+
+    .nav-button {
+        font-family: 'Lobster Two';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        color: #FFFFFF;
+        background-color: transparent;
+        border: none;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
+        padding-right: 4px;
+        padding-left: 2px;
+    }
+
+    .nav-button:hover {
+        color: #6cead5;
+        font-weight: bold;
+    }
+
+    .welcome-btn {
+        font-family: 'Lobster Two';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 28px;
+        color: #FFFFFF;
+        background-color: transparent;
+        border: none;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        text-decoration: none;
+    }
+
+    /* Page Title */
+    #rps_title {
+        text-align: center;
+        font-size: 45px;
+        color: #FFFFFF;
+        letter-spacing: 10px;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: #000000;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: 'Lobster Two';
+        font-weight: 400;
+    }
+
+    #videoElement {
+        width: 475px;
+        height: 475px;
+    }
+
+    #computer-image {
+        margin-top: 3.5rem;
+        height: 360px;
+        width: 475px;
+    }
+
+    .play-button {
+        font-family: Century Gothic;
+        font-size: 30px;
+        font-weight: bold;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        padding-inline: 75px;
+        background-color: #D9D9D999;
+    }
+
+    /* Footer */
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 100px;
+        line-height: 100px;
+        background-color: #F0F094;
+    }
+
+    .footer-container {
+        width: auto;
+        padding: 0 15px;
+    }
+
+    .footer-text {
+        font-family: Lobster Two;
+        font-size: 60px;
+        padding-bottom: 15px;
+        color: #FFFFFF;
+    }
+
+    #prediction {
+        font-size: 60px;
+    }
+
+</style>

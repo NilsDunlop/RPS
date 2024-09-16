@@ -1,0 +1,21 @@
+image: python:latest
+
+stages:
+  - test
+
+test:
+  stage: test
+  only:
+    - merge_requests
+    - push
+  before_script:
+    - sudo apt-get install -y python3-pip
+    - sudo pip3 install --upgrade setuptools
+    - pip install Django pandas Pillow
+    - pip install tensorflow --no-cache-dir
+    - python3 ./ai_project/manage.py makemigrations
+    - python3 ./ai_project/manage.py migrate
+  script:
+    - echo run tests in this section
+    - python3 ./ai_project/manage.py test ai_project
+

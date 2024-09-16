@@ -1,0 +1,23 @@
+services:
+
+  web:
+    build:
+      context: ./ai_project/
+    command: gunicorn ai_project.wsgi:application --bind 0.0.0.0:8000 --timeout 1000 --workers=3 --threads=3 --worker-connections=1000
+    volumes:
+      - ./ai_project/:/usr/src/app/
+      - static_files:/usr/src/app/staticfiles
+    expose:
+     - 8000
+
+  nginx:
+    build:
+      context: ./nginx/
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - static_files:/home/app/staticfiles
+
+volumes:
+  static_files:
